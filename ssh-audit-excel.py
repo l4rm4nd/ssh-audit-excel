@@ -10,9 +10,11 @@ import argparse
 # Setup argparse to get the directory path from command line
 parser = argparse.ArgumentParser(description='Process JSON files for SSH auditing.')
 parser.add_argument('-d', '--dir', required=True, help='Directory containing the JSON files')
+parser.add_argument('-o', '--output', help='Directory to store the output Excel file', default='.')
 
 args = parser.parse_args()
 json_dir = args.dir
+output_dir = args.output
 
 # Create lists to hold the detailed data
 detailed_data = []
@@ -115,7 +117,7 @@ df_detailed = pd.DataFrame(detailed_data).drop_duplicates()
 
 # Generate the filename with the current date and time
 current_time = datetime.now().strftime('%Y%m%d_%H%M%S')
-output_file = f'SSH_Auditing_Results_{current_time}.xlsx'
+output_file = os.path.join(output_dir, f'SSH_Auditing_Results_{current_time}.xlsx')
 
 # Create an Excel writer object
 with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
